@@ -1,0 +1,737 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Troubleshooting in Tardive Dyskinesia | Real World CE</title>
+  <meta name="description" content="Premium interactive TD learning module for Real World CE." />
+  <meta name="theme-color" content="#0b1b3a" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root { color-scheme: light; }
+    html { scroll-behavior: smooth; }
+    body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background:#f8fbff; }
+
+    .glass { background: rgba(255,255,255,.86); backdrop-filter: blur(16px); border:1px solid rgba(15,23,42,.08); }
+    .glass-top { background: rgba(255,255,255,.9); backdrop-filter: blur(14px); border-bottom:1px solid rgba(226,232,240,1); }
+    .soft-shadow { box-shadow: 0 18px 70px rgba(15,23,42,.10); }
+    .deep-shadow { box-shadow: 0 22px 90px rgba(15,23,42,.16); }
+
+    .hero-bg {
+      background:
+        radial-gradient(900px 420px at 12% 10%, rgba(37,99,235,.16), transparent 60%),
+        radial-gradient(800px 420px at 88% 12%, rgba(14,165,233,.18), transparent 60%),
+        radial-gradient(600px 280px at 50% 100%, rgba(99,102,241,.12), transparent 60%),
+        linear-gradient(180deg, #ffffff 0%, #eaf5ff 54%, #f8fbff 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-grid::before {
+      content:"";
+      position:absolute;
+      inset:0;
+      background-image:
+        linear-gradient(rgba(148,163,184,.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148,163,184,.08) 1px, transparent 1px);
+      background-size: 36px 36px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.45), transparent);
+      pointer-events:none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
+      color: #fff;
+      transition: .25s ease;
+    }
+    .btn-primary:hover { transform: translateY(-1px); filter: brightness(1.05); }
+    .btn-secondary {
+      background: #fff;
+      color: #0f172a;
+      border:1px solid rgba(148,163,184,.3);
+      transition: .25s ease;
+    }
+    .btn-secondary:hover { background:#f8fafc; }
+
+    .section-enter { animation: fadeUp .45s ease; }
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(10px); }
+      to { opacity:1; transform:translateY(0); }
+    }
+
+    .progress-rail { background:#e2e8f0; border-radius:9999px; overflow:hidden; }
+    .progress-fill {
+      height:100%;
+      width:0%;
+      border-radius:9999px;
+      background: linear-gradient(90deg, #2563eb, #0ea5e9);
+      transition: width .35s ease;
+    }
+
+    .nav-pill.active {
+      background:#dbeafe;
+      border-color:#93c5fd;
+      color:#1d4ed8;
+    }
+
+    .screen { display:none; }
+    .screen.active { display:block; }
+
+    .quiz-option {
+      transition: .2s ease;
+      border:1px solid rgba(226,232,240,1);
+      background:#fff;
+    }
+    .quiz-option:hover { border-color:#93c5fd; background:#f8fbff; }
+    .quiz-option.correct { background:#ecfdf5; border-color:#34d399; }
+    .quiz-option.incorrect { background:#fef2f2; border-color:#f87171; }
+
+    .status-dot {
+      width:10px; height:10px; border-radius:9999px; display:inline-block;
+      background:#cbd5e1;
+    }
+    .status-dot.done { background:#10b981; box-shadow:0 0 0 6px rgba(16,185,129,.12); }
+
+    .metric-card {
+      background:linear-gradient(180deg, rgba(255,255,255,.98), rgba(248,250,252,.98));
+      border:1px solid rgba(148,163,184,.16);
+    }
+
+    .checkpoint-card {
+      background: linear-gradient(135deg, #eff6ff, #eef2ff);
+      border:1px solid rgba(96,165,250,.35);
+    }
+
+    .modal-backdrop {
+      background: rgba(2,6,23,.68);
+      backdrop-filter: blur(8px);
+    }
+
+    .module-visual {
+      background:
+        radial-gradient(420px 180px at 20% 20%, rgba(14,165,233,.18), transparent 60%),
+        radial-gradient(420px 180px at 80% 10%, rgba(37,99,235,.18), transparent 60%),
+        linear-gradient(180deg, #0f172a 0%, #0b2447 100%);
+    }
+
+    .chip {
+      border:1px solid rgba(148,163,184,.24);
+      background:#fff;
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-800">
+
+<header class="sticky top-0 z-40 glass-top">
+  <div class="max-w-7xl mx-auto px-5 md:px-8 py-4 flex items-center justify-between gap-4">
+    <div class="flex items-center gap-3">
+      <div class="text-xl font-extrabold tracking-tight text-slate-900">Real World <span class="text-blue-700">CE</span></div>
+      <div class="hidden md:block h-5 w-px bg-slate-300"></div>
+      <div class="hidden md:block text-sm font-semibold text-slate-500">Featuring: REAL QUIZ</div>
+    </div>
+    <div class="flex items-center gap-3 min-w-[170px]">
+      <div class="text-sm font-semibold text-slate-500"><span id="progress-label">33%</span></div>
+      <div class="w-28 md:w-44 h-2.5 progress-rail">
+        <div id="progress-fill" class="progress-fill" style="width:33%"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="hero-bg hero-grid">
+  <div class="max-w-7xl mx-auto px-5 md:px-8 pt-14 pb-16 md:pt-20 md:pb-24 relative z-10">
+    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs font-bold uppercase tracking-[0.2em] text-slate-600">
+      <span class="w-2.5 h-2.5 rounded-full bg-blue-600 inline-block"></span>
+      Clinical Simulation
+    </div>
+
+    <div class="grid lg:grid-cols-[1.25fr_.75fr] gap-10 mt-6 items-center">
+      <div>
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-tight">
+          Troubleshooting in
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-sky-500">Tardive Dyskinesia</span>
+        </h1>
+        <p class="mt-6 text-lg md:text-xl text-slate-600 max-w-3xl leading-relaxed">
+          A cleaner, stronger, more interactive learning experience built to feel like a premium clinical education platform, with case-based decision points, live progress tracking, and functional checkpoint assessments.
+        </p>
+
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="#course-shell" class="btn-primary px-6 py-3 rounded-2xl font-semibold deep-shadow">Start Module</a>
+          <button id="open-overview" class="btn-secondary px-6 py-3 rounded-2xl font-semibold">View Learning Goals</button>
+        </div>
+
+        <div class="mt-10 grid sm:grid-cols-3 gap-4">
+          <div class="metric-card rounded-2xl p-5 soft-shadow">
+            <div class="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">Audience</div>
+            <p class="mt-2 font-semibold text-slate-900">Psychiatric physicians, nurses, NPs, and PAs</p>
+          </div>
+          <div class="metric-card rounded-2xl p-5 soft-shadow">
+            <div class="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">Experience</div>
+            <p class="mt-2 font-semibold text-slate-900">Interactive modules with working checkpoints</p>
+          </div>
+          <div class="metric-card rounded-2xl p-5 soft-shadow">
+            <div class="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">Outcome</div>
+            <p class="mt-2 font-semibold text-slate-900">Better monitoring, assessment, and treatment selection</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass rounded-[2rem] p-6 soft-shadow">
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">Course Flow</div>
+            <h2 class="mt-1 text-2xl font-extrabold text-slate-900">Three Modules</h2>
+          </div>
+          <span class="material-symbols-outlined text-blue-600 text-3xl">neurology</span>
+        </div>
+
+        <div class="mt-6 space-y-4">
+          <div class="flex items-start gap-3 p-4 rounded-2xl bg-white border border-slate-200">
+            <span id="flow-dot-1" class="status-dot done mt-1"></span>
+            <div>
+              <div class="font-bold text-slate-900">Module 1</div>
+              <p class="text-sm text-slate-600 mt-1">Recognize hidden burden, respiratory risk, and caregiver impact.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3 p-4 rounded-2xl bg-white border border-slate-200">
+            <span id="flow-dot-2" class="status-dot mt-1"></span>
+            <div>
+              <div class="font-bold text-slate-900">Module 2</div>
+              <p class="text-sm text-slate-600 mt-1">Use assessment tools to capture both severity and functional burden.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3 p-4 rounded-2xl bg-white border border-slate-200">
+            <span id="flow-dot-3" class="status-dot mt-1"></span>
+            <div>
+              <div class="font-bold text-slate-900">Module 3</div>
+              <p class="text-sm text-slate-600 mt-1">Apply evidence-based VMAT 2 inhibitor logic and dose planning.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 rounded-2xl module-visual p-5 text-white">
+          <div class="text-xs uppercase tracking-[0.18em] text-sky-200 font-bold">Premium Learning Layer</div>
+          <div class="mt-3 text-xl font-bold">Real quiz checkpoints now fully functional</div>
+          <p class="mt-2 text-sm text-slate-200">Answer feedback, completion tracking, and a final mastery finish screen are built in.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<main id="course-shell" class="max-w-7xl mx-auto px-5 md:px-8 py-12">
+  <div class="grid lg:grid-cols-[250px_1fr] gap-6 items-start">
+    <aside class="glass rounded-3xl p-4 soft-shadow lg:sticky lg:top-24">
+      <div class="text-xs font-bold uppercase tracking-[0.18em] text-slate-500 mb-4">Course Navigation</div>
+      <div class="space-y-2">
+        <button class="nav-pill active w-full text-left px-4 py-3 rounded-2xl border border-slate-200 text-sm font-semibold text-slate-700 transition" data-screen="1">Module 1</button>
+        <button class="nav-pill w-full text-left px-4 py-3 rounded-2xl border border-slate-200 text-sm font-semibold text-slate-700 transition" data-screen="2">Module 2</button>
+        <button class="nav-pill w-full text-left px-4 py-3 rounded-2xl border border-slate-200 text-sm font-semibold text-slate-700 transition" data-screen="3">Module 3</button>
+      </div>
+
+      <div class="mt-6 p-4 rounded-2xl bg-slate-50 border border-slate-200">
+        <div class="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">Mastery Status</div>
+        <div class="mt-3 space-y-3 text-sm">
+          <div class="flex items-center justify-between"><span>Checkpoint 1</span><span id="mini-c1" class="text-slate-400 font-semibold">Pending</span></div>
+          <div class="flex items-center justify-between"><span>Checkpoint 2</span><span id="mini-c2" class="text-slate-400 font-semibold">Pending</span></div>
+          <div class="flex items-center justify-between"><span>Checkpoint 3</span><span id="mini-c3" class="text-slate-400 font-semibold">Pending</span></div>
+        </div>
+      </div>
+    </aside>
+
+    <section>
+      <div id="screen-1" class="screen active section-enter glass rounded-[2rem] p-7 md:p-10 soft-shadow">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-800 text-xs font-bold uppercase tracking-[0.18em] mb-5">Module 1 of 3</div>
+        <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900">The Hidden Burden and Real World Impact of TD</h2>
+        <p class="mt-4 text-slate-600 max-w-4xl">Describe the physical, psychological, and socioeconomic impact of TD symptoms and recognize how under-identification can delay meaningful care.</p>
+
+        <div class="mt-8 rounded-[2rem] module-visual p-8 md:p-10 deep-shadow">
+          <div class="grid md:grid-cols-[1.2fr_.8fr] gap-6 items-center">
+            <div>
+              <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 text-sky-200 text-xs font-bold uppercase tracking-[0.18em]">Clinical Focus</div>
+              <h3 class="mt-4 text-3xl font-extrabold text-white">When “mild” does not mean low burden</h3>
+              <p class="mt-4 text-slate-200 leading-relaxed">Many patients experience meaningful social, occupational, and emotional harm even when abnormal movements appear limited during a visit.</p>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="chip rounded-2xl p-4">
+                <div class="text-xs uppercase tracking-[0.16em] text-slate-500 font-bold">Recognition gap</div>
+                <div class="mt-2 font-bold text-slate-900">Often missed</div>
+              </div>
+              <div class="chip rounded-2xl p-4">
+                <div class="text-xs uppercase tracking-[0.16em] text-slate-500 font-bold">Impact</div>
+                <div class="mt-2 font-bold text-slate-900">Social + functional</div>
+              </div>
+              <div class="chip rounded-2xl p-4">
+                <div class="text-xs uppercase tracking-[0.16em] text-slate-500 font-bold">Risk area</div>
+                <div class="mt-2 font-bold text-slate-900">Respiratory + swallowing</div>
+              </div>
+              <div class="chip rounded-2xl p-4">
+                <div class="text-xs uppercase tracking-[0.16em] text-slate-500 font-bold">Caregiver strain</div>
+                <div class="mt-2 font-bold text-slate-900">Often overlooked</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 grid md:grid-cols-2 gap-5">
+          <div class="bg-white rounded-2xl border border-slate-200 p-5">
+            <div class="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">Diagnostic gap</div>
+            <p class="mt-2 text-slate-700">TD can affect a substantial share of patients exposed to antipsychotic therapy, yet many remain undiagnosed in routine care.</p>
+          </div>
+          <div class="bg-white rounded-2xl border border-slate-200 p-5">
+            <div class="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">Mild movement myth</div>
+            <p class="mt-2 text-slate-700">Visible severity and day-to-day burden do not always line up. Social avoidance, stigma, and medication nonadherence may still be high.</p>
+          </div>
+          <div class="bg-white rounded-2xl border border-slate-200 p-5">
+            <div class="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">Life threatening risk</div>
+            <p class="mt-2 text-slate-700">Respiratory and swallowing-related manifestations can be clinically important and may be mistaken for primary cardiopulmonary disease.</p>
+          </div>
+          <div class="bg-white rounded-2xl border border-slate-200 p-5">
+            <div class="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">Caregiver burden</div>
+            <p class="mt-2 text-slate-700">The impact extends beyond the patient and may include missed work, emotional strain, and greater caregiving responsibilities.</p>
+          </div>
+        </div>
+
+        <div class="mt-10 checkpoint-card rounded-[2rem] p-6 md:p-8">
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+            <div>
+              <div class="flex items-center gap-2 text-blue-700 font-bold"><span class="material-symbols-outlined">air</span> Real Quiz Checkpoint 1</div>
+              <p class="mt-2 text-slate-700">Test whether the learner can identify respiratory dyskinesia versus a primary cardiopulmonary explanation.</p>
+            </div>
+            <button class="launch-quiz btn-primary px-6 py-3 rounded-2xl font-semibold" data-quiz="1">Launch Scenario</button>
+          </div>
+        </div>
+
+        <div class="mt-8 flex justify-end">
+          <button class="next-screen btn-primary px-6 py-3 rounded-2xl font-semibold flex items-center gap-2">Continue to Module 2 <span class="material-symbols-outlined text-sm">arrow_forward</span></button>
+        </div>
+      </div>
+
+      <div id="screen-2" class="screen section-enter glass rounded-[2rem] p-7 md:p-10 soft-shadow">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-800 text-xs font-bold uppercase tracking-[0.18em] mb-5">Module 2 of 3</div>
+        <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900">Bridging the Gap with Standardized Assessment Tools</h2>
+        <p class="mt-4 text-slate-600 max-w-4xl">Use a more complete assessment framework that captures movement severity and functional burden rather than relying on observation alone.</p>
+
+        <div class="mt-8 grid md:grid-cols-[1fr_.9fr] gap-6">
+          <div class="rounded-[2rem] bg-white border border-slate-200 p-6">
+            <div class="text-xs uppercase tracking-[0.18em] text-slate-500 font-bold">Assessment Strategy</div>
+            <h3 class="mt-3 text-2xl font-extrabold text-slate-900">Severity plus impact</h3>
+            <p class="mt-3 text-slate-700">A more useful workflow pairs a structured movement tool with targeted questions or tools focused on social, psychological, physical, and vocational burden.</p>
+            <div class="mt-5 space-y-3">
+              <div class="chip rounded-2xl p-4">
+                <div class="font-bold text-slate-900">AIMS</div>
+                <p class="mt-1 text-sm text-slate-600">Best for movement observation and severity.</p>
+              </div>
+              <div class="chip rounded-2xl p-4">
+                <div class="font-bold text-slate-900">Impact-focused tools</div>
+                <p class="mt-1 text-sm text-slate-600">Helpful when burden is high but visible movement may seem limited during the visit.</p>
+              </div>
+              <div class="chip rounded-2xl p-4">
+                <div class="font-bold text-slate-900">Clinical reality</div>
+                <p class="mt-1 text-sm text-slate-600">Routine monitoring often falls short of best-practice recommendations.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="rounded-[2rem] module-visual p-8 deep-shadow">
+            <div class="text-xs uppercase tracking-[0.18em] text-sky-200 font-bold">Key Decision Point</div>
+            <h3 class="mt-3 text-3xl font-extrabold text-white">What do you do when the patient says the burden is severe, but the room exam looks subtle?</h3>
+            <p class="mt-4 text-slate-200">This is where impact-oriented assessment matters. Visible movement alone can miss the real-world burden.</p>
+          </div>
+        </div>
+
+        <div class="mt-10 checkpoint-card rounded-[2rem] p-6 md:p-8">
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+            <div>
+              <div class="flex items-center gap-2 text-blue-700 font-bold"><span class="material-symbols-outlined">leaderboard</span> Real Quiz Checkpoint 2</div>
+              <p class="mt-2 text-slate-700">Choose the best assessment approach for a high-functioning patient with stigma and functional decline despite subtle movements.</p>
+            </div>
+            <button class="launch-quiz btn-primary px-6 py-3 rounded-2xl font-semibold" data-quiz="2">Launch Assessment</button>
+          </div>
+        </div>
+
+        <div class="mt-8 flex flex-col sm:flex-row justify-between gap-3">
+          <button class="prev-screen btn-secondary px-6 py-3 rounded-2xl font-semibold flex items-center justify-center gap-2"><span class="material-symbols-outlined text-sm">arrow_back</span> Previous</button>
+          <button class="next-screen btn-primary px-6 py-3 rounded-2xl font-semibold flex items-center justify-center gap-2">Continue to Module 3 <span class="material-symbols-outlined text-sm">arrow_forward</span></button>
+        </div>
+      </div>
+
+      <div id="screen-3" class="screen section-enter glass rounded-[2rem] p-7 md:p-10 soft-shadow">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-800 text-xs font-bold uppercase tracking-[0.18em] mb-5">Module 3 of 3</div>
+        <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900">Evidence Based Treatment and VMAT 2 Inhibitor Titration</h2>
+        <p class="mt-4 text-slate-600 max-w-4xl">Differentiate first-line TD treatments from outdated practices and apply a more patient-specific titration mindset.</p>
+
+        <div class="mt-8 grid md:grid-cols-2 gap-5">
+          <div class="bg-white rounded-2xl border border-slate-200 p-5">
+            <div class="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">Outdated practice</div>
+            <p class="mt-2 text-slate-700">Anticholinergics are not a solution for TD and may delay effective management.</p>
+          </div>
+          <div class="bg-white rounded-2xl border border-slate-200 p-5">
+            <div class="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">First-line category</div>
+            <p class="mt-2 text-slate-700">VMAT 2 inhibitors are the key evidence-based treatment class for TD.</p>
+          </div>
+          <div class="bg-white rounded-2xl border border-slate-200 p-5">
+            <div class="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">Dose planning</div>
+            <p class="mt-2 text-slate-700">Titration should reflect response, tolerability, potential interactions, and metabolism-related considerations.</p>
+          </div>
+          <div class="bg-white rounded-2xl border border-slate-200 p-5">
+            <div class="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">Precision care</div>
+            <p class="mt-2 text-slate-700">Non-normal CYP2D6 status can materially affect exposure and may justify more careful dose limits and planning.</p>
+          </div>
+        </div>
+
+        <div class="mt-8 rounded-[2rem] module-visual p-8 md:p-10 deep-shadow">
+          <div class="text-xs uppercase tracking-[0.18em] text-sky-200 font-bold">Clinical Application</div>
+          <h3 class="mt-3 text-3xl font-extrabold text-white">Select treatment logic that reflects current evidence</h3>
+          <p class="mt-4 text-slate-200">Treat TD directly while preserving needed psychiatric therapy when appropriate. Then tailor titration to the patient, not just the label.</p>
+        </div>
+
+        <div class="mt-10 checkpoint-card rounded-[2rem] p-6 md:p-8">
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+            <div>
+              <div class="flex items-center gap-2 text-blue-700 font-bold"><span class="material-symbols-outlined">science</span> Real Quiz Checkpoint 3</div>
+              <p class="mt-2 text-slate-700">Apply a treatment and titration plan to a patient with metabolism-related considerations.</p>
+            </div>
+            <button class="launch-quiz btn-primary px-6 py-3 rounded-2xl font-semibold" data-quiz="3">Launch Case Study</button>
+          </div>
+        </div>
+
+        <div class="mt-8 flex flex-col sm:flex-row justify-between gap-3">
+          <button class="prev-screen btn-secondary px-6 py-3 rounded-2xl font-semibold flex items-center justify-center gap-2"><span class="material-symbols-outlined text-sm">arrow_back</span> Previous</button>
+          <button id="finish-course" class="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-6 py-3 rounded-2xl font-semibold shadow-md flex items-center justify-center gap-2">Finish Course <span class="material-symbols-outlined text-sm">done_all</span></button>
+        </div>
+      </div>
+
+      <div id="completion-screen" class="screen glass rounded-[2rem] p-8 md:p-12 soft-shadow text-center">
+        <div class="w-20 h-20 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto">
+          <span class="material-symbols-outlined text-5xl">verified</span>
+        </div>
+        <h2 class="mt-6 text-3xl md:text-4xl font-extrabold text-slate-900">Module Complete</h2>
+        <p class="mt-4 text-lg text-slate-600 max-w-2xl mx-auto">You now have a stronger, cleaner Real World CE training experience with functional checkpoints, progress tracking, and a polished finish screen.</p>
+
+        <div class="mt-8 grid sm:grid-cols-3 gap-4 max-w-4xl mx-auto">
+          <div class="metric-card rounded-2xl p-5">
+            <div class="text-xs uppercase tracking-[0.16em] text-slate-500 font-bold">Modules reviewed</div>
+            <div class="mt-2 text-3xl font-extrabold text-slate-900">3</div>
+          </div>
+          <div class="metric-card rounded-2xl p-5">
+            <div class="text-xs uppercase tracking-[0.16em] text-slate-500 font-bold">Checkpoints</div>
+            <div class="mt-2 text-3xl font-extrabold text-slate-900">3</div>
+          </div>
+          <div class="metric-card rounded-2xl p-5">
+            <div class="text-xs uppercase tracking-[0.16em] text-slate-500 font-bold">Final status</div>
+            <div class="mt-2 text-3xl font-extrabold text-emerald-600">100%</div>
+          </div>
+        </div>
+
+        <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <button id="restart-course" class="btn-primary px-6 py-3 rounded-2xl font-semibold">Restart Module</button>
+          <a href="#course-shell" class="btn-secondary px-6 py-3 rounded-2xl font-semibold">Back to Course</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<div id="quiz-modal" class="fixed inset-0 z-50 hidden">
+  <div class="absolute inset-0 modal-backdrop"></div>
+  <div class="relative min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-2xl glass rounded-[2rem] soft-shadow overflow-hidden">
+      <div class="p-6 md:p-8 border-b border-slate-200 flex items-start justify-between gap-4">
+        <div>
+          <div id="modal-kicker" class="text-xs font-bold uppercase tracking-[0.18em] text-blue-700">Checkpoint</div>
+          <h3 id="modal-title" class="mt-2 text-2xl md:text-3xl font-extrabold text-slate-900">Quiz</h3>
+        </div>
+        <button id="close-modal" class="w-11 h-11 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="p-6 md:p-8">
+        <p id="modal-question" class="text-lg text-slate-700 leading-relaxed"></p>
+        <div id="quiz-options" class="mt-6 space-y-3"></div>
+        <div id="quiz-feedback" class="mt-6 hidden rounded-2xl p-5 border"></div>
+        <div class="mt-8 flex justify-end">
+          <button id="continue-after-quiz" class="hidden btn-primary px-6 py-3 rounded-2xl font-semibold">Continue</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="overview-modal" class="fixed inset-0 z-50 hidden">
+  <div class="absolute inset-0 modal-backdrop"></div>
+  <div class="relative min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-3xl glass rounded-[2rem] soft-shadow overflow-hidden">
+      <div class="p-6 md:p-8 border-b border-slate-200 flex items-start justify-between gap-4">
+        <div>
+          <div class="text-xs font-bold uppercase tracking-[0.18em] text-blue-700">Learning Goals</div>
+          <h3 class="mt-2 text-2xl md:text-3xl font-extrabold text-slate-900">What this module improves</h3>
+        </div>
+        <button id="close-overview" class="w-11 h-11 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="p-6 md:p-8 grid md:grid-cols-3 gap-4">
+        <div class="rounded-2xl border border-slate-200 bg-white p-5">
+          <div class="font-bold text-slate-900">Monitoring</div>
+          <p class="mt-2 text-sm text-slate-600">Strengthen routine recognition of TD and avoid overlooking burden when movements appear subtle.</p>
+        </div>
+        <div class="rounded-2xl border border-slate-200 bg-white p-5">
+          <div class="font-bold text-slate-900">Assessment</div>
+          <p class="mt-2 text-sm text-slate-600">Use severity tools and impact-oriented tools together for a more realistic clinical picture.</p>
+        </div>
+        <div class="rounded-2xl border border-slate-200 bg-white p-5">
+          <div class="font-bold text-slate-900">Treatment</div>
+          <p class="mt-2 text-sm text-slate-600">Apply evidence-based treatment planning with stronger patient-specific titration logic.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="mt-12 bg-slate-900 text-white">
+  <div class="max-w-7xl mx-auto px-5 md:px-8 py-14 grid md:grid-cols-2 gap-8 items-center">
+    <div>
+      <div class="text-2xl font-extrabold tracking-tight">Real World <span class="text-sky-400">CE</span></div>
+      <p class="mt-3 text-slate-300 max-w-xl">Interactive clinical education built to feel more like a premium learning platform and less like a static handout.</p>
+    </div>
+    <div class="md:text-right">
+      <div class="text-sm text-slate-400 font-semibold">Course completion</div>
+      <div id="footer-progress" class="text-3xl font-extrabold mt-1">33%</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const totalScreens = 3;
+  let currentScreen = 1;
+
+  const state = {
+    screenProgress: 1,
+    quizzesDone: new Set(),
+    currentQuiz: null
+  };
+
+  const quizData = {
+    1: {
+      kicker: 'Checkpoint 1',
+      title: 'Respiratory Dyskinesia Recognition',
+      question: 'A patient on long term antipsychotic therapy presents with irregular breathing, intermittent gasping, and visible mouth and trunk movements. What is the best first interpretation?',
+      options: [
+        'Assume anxiety is the explanation and defer movement assessment.',
+        'Consider possible respiratory dyskinesia in the broader context of TD risk.',
+        'Treat only as asthma because abnormal breathing rules out TD.'
+      ],
+      answer: 1,
+      explanation: 'Correct. Respiratory dyskinesia can mimic primary cardiopulmonary conditions, so the abnormal breathing pattern should be interpreted in the wider TD context.'
+    },
+    2: {
+      kicker: 'Checkpoint 2',
+      title: 'Assessment Tool Selection',
+      question: 'A high functioning patient reports embarrassment, social withdrawal, and communication difficulty, but visible movements are subtle in clinic. What is the best next step?',
+      options: [
+        'Use visual observation only and reassure the patient because the movements look mild.',
+        'Pair a structured movement assessment with an impact-oriented or patient-reported tool.',
+        'Avoid formal assessment because TD tools are only useful in severe cases.'
+      ],
+      answer: 1,
+      explanation: 'Correct. Functional burden can be high even when movements appear subtle, so combining severity and impact tools gives a more complete assessment.'
+    },
+    3: {
+      kicker: 'Checkpoint 3',
+      title: 'Treatment and Titration Logic',
+      question: 'A patient with confirmed TD is being considered for treatment. Which approach best reflects evidence-based first-line care?',
+      options: [
+        'Start an anticholinergic and wait for TD to improve.',
+        'Consider a VMAT 2 inhibitor and tailor dose strategy to response, tolerability, and metabolism-related factors.',
+        'Stop all psychiatric therapy immediately before treating TD.'
+      ],
+      answer: 1,
+      explanation: 'Correct. VMAT 2 inhibitors are the main evidence-based treatment class for TD, and titration should reflect patient-specific factors.'
+    }
+  };
+
+  const progressLabel = document.getElementById('progress-label');
+  const progressFill = document.getElementById('progress-fill');
+  const footerProgress = document.getElementById('footer-progress');
+
+  function getProgressValue() {
+    const modulePart = (state.screenProgress / totalScreens) * 55;
+    const quizPart = (state.quizzesDone.size / 3) * 45;
+    return Math.round(modulePart + quizPart);
+  }
+
+  function updateProgressUI(force100 = false) {
+    const value = force100 ? 100 : getProgressValue();
+    progressLabel.textContent = value + '%';
+    progressFill.style.width = value + '%';
+    footerProgress.textContent = value + '%';
+  }
+
+  function updateFlowDots() {
+    for (let i = 1; i <= 3; i++) {
+      document.getElementById('flow-dot-' + i).classList.toggle('done', i <= currentScreen);
+    }
+  }
+
+  function updateNavPills() {
+    document.querySelectorAll('.nav-pill').forEach(btn => {
+      btn.classList.toggle('active', Number(btn.dataset.screen) === currentScreen);
+    });
+  }
+
+  function showScreen(screen) {
+    currentScreen = screen;
+    state.screenProgress = Math.max(state.screenProgress, screen);
+
+    document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+    const active = document.getElementById('screen-' + screen);
+    if (active) active.classList.add('active');
+
+    updateFlowDots();
+    updateNavPills();
+    updateProgressUI();
+    window.scrollTo({ top: document.getElementById('course-shell').offsetTop - 80, behavior: 'smooth' });
+  }
+
+  document.querySelectorAll('.nav-pill').forEach(btn => {
+    btn.addEventListener('click', () => showScreen(Number(btn.dataset.screen)));
+  });
+
+  document.querySelectorAll('.next-screen').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (currentScreen < totalScreens) showScreen(currentScreen + 1);
+    });
+  });
+
+  document.querySelectorAll('.prev-screen').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (currentScreen > 1) showScreen(currentScreen - 1);
+    });
+  });
+
+  const quizModal = document.getElementById('quiz-modal');
+  const modalKicker = document.getElementById('modal-kicker');
+  const modalTitle = document.getElementById('modal-title');
+  const modalQuestion = document.getElementById('modal-question');
+  const quizOptions = document.getElementById('quiz-options');
+  const quizFeedback = document.getElementById('quiz-feedback');
+  const continueAfterQuiz = document.getElementById('continue-after-quiz');
+
+  function openQuiz(id) {
+    state.currentQuiz = id;
+    const quiz = quizData[id];
+    modalKicker.textContent = quiz.kicker;
+    modalTitle.textContent = quiz.title;
+    modalQuestion.textContent = quiz.question;
+    quizOptions.innerHTML = '';
+    quizFeedback.className = 'mt-6 hidden rounded-2xl p-5 border';
+    quizFeedback.innerHTML = '';
+    continueAfterQuiz.classList.add('hidden');
+
+    quiz.options.forEach((option, index) => {
+      const btn = document.createElement('button');
+      btn.className = 'quiz-option w-full text-left p-5 rounded-2xl';
+      btn.innerHTML = `<span class="font-medium text-slate-700">${option}</span>`;
+      btn.addEventListener('click', () => answerQuiz(index, btn));
+      quizOptions.appendChild(btn);
+    });
+
+    quizModal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function answerQuiz(index, buttonEl) {
+    const quiz = quizData[state.currentQuiz];
+    const buttons = [...document.querySelectorAll('.quiz-option')];
+    buttons.forEach((btn, idx) => {
+      btn.disabled = true;
+      if (idx === quiz.answer) btn.classList.add('correct');
+    });
+
+    if (index !== quiz.answer) {
+      buttonEl.classList.add('incorrect');
+    }
+
+    quizFeedback.classList.remove('hidden');
+    if (index === quiz.answer) {
+      quizFeedback.classList.add('bg-emerald-50', 'border-emerald-200');
+      quizFeedback.innerHTML = `<div class="flex items-start gap-3"><span class="material-symbols-outlined text-emerald-600">check_circle</span><div><div class="font-bold text-emerald-900">Correct</div><p class="mt-1 text-emerald-800">${quiz.explanation}</p></div></div>`;
+    } else {
+      quizFeedback.classList.add('bg-rose-50', 'border-rose-200');
+      quizFeedback.innerHTML = `<div class="flex items-start gap-3"><span class="material-symbols-outlined text-rose-600">cancel</span><div><div class="font-bold text-rose-900">Not quite</div><p class="mt-1 text-rose-800">${quiz.explanation}</p></div></div>`;
+    }
+
+    state.quizzesDone.add(state.currentQuiz);
+    document.getElementById('mini-c' + state.currentQuiz).textContent = 'Complete';
+    document.getElementById('mini-c' + state.currentQuiz).className = 'text-emerald-600 font-semibold';
+    updateProgressUI();
+
+    continueAfterQuiz.classList.remove('hidden');
+    continueAfterQuiz.textContent = state.quizzesDone.size === 3 ? 'Finish' : 'Continue';
+  }
+
+  function closeQuiz() {
+    quizModal.classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('.launch-quiz').forEach(btn => {
+    btn.addEventListener('click', () => openQuiz(Number(btn.dataset.quiz)));
+  });
+  document.getElementById('close-modal').addEventListener('click', closeQuiz);
+  continueAfterQuiz.addEventListener('click', closeQuiz);
+  quizModal.addEventListener('click', (e) => {
+    if (e.target === quizModal || e.target.classList.contains('modal-backdrop')) closeQuiz();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeQuiz();
+      closeOverview();
+    }
+  });
+
+  const overviewModal = document.getElementById('overview-modal');
+  function openOverview() {
+    overviewModal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeOverview() {
+    overviewModal.classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('open-overview').addEventListener('click', openOverview);
+  document.getElementById('close-overview').addEventListener('click', closeOverview);
+  overviewModal.addEventListener('click', (e) => {
+    if (e.target === overviewModal || e.target.classList.contains('modal-backdrop')) closeOverview();
+  });
+
+  document.getElementById('finish-course').addEventListener('click', () => {
+    document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+    document.getElementById('completion-screen').classList.add('active');
+    updateProgressUI(true);
+    window.scrollTo({ top: document.getElementById('course-shell').offsetTop - 80, behavior: 'smooth' });
+  });
+
+  document.getElementById('restart-course').addEventListener('click', () => {
+    state.screenProgress = 1;
+    state.quizzesDone = new Set();
+    ['1','2','3'].forEach(id => {
+      const el = document.getElementById('mini-c' + id);
+      el.textContent = 'Pending';
+      el.className = 'text-slate-400 font-semibold';
+    });
+    showScreen(1);
+    updateProgressUI();
+  });
+
+  updateFlowDots();
+  updateNavPills();
+  updateProgressUI();
+</script>
+</body>
+</html>
